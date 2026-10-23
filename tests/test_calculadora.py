@@ -49,3 +49,21 @@ def test_calcular_envio_gratis() -> None:
 
 def test_calcular_recargo_express() -> None:
     assert calcular_envio(500, 10, express=True) == 160
+
+    
+@pytest.mark.parametrize(
+    ("distancia_km", "esperado"),
+    [(4, 50), (10, 90), (30, 150)],
+)
+def test_calcular_envio_por_distancia(distancia_km: int, esperado: float) -> None:
+    assert calcular_envio(500, distancia_km) == esperado
+
+
+def test_rechaza_total_de_compra_negativo() -> None:
+    with pytest.raises(ValueError, match="total de la compra"):
+        calcular_envio(-1, 3)
+
+
+def test_rechaza_distancia_negativa() -> None:
+    with pytest.raises(ValueError, match="distancia"):
+        calcular_envio(200, -1)
